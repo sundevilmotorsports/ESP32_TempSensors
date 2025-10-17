@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/aditi/Desktop/#2 SunDevilMotorsports/ESP32-temp/main
+# Install script for directory: C:/Users/aditi/Desktop/#2 SunDevilMotorsports/ESP32_Temp/main
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

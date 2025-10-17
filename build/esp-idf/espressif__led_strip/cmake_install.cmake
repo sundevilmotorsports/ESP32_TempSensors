@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/aditi/Desktop/#2 SunDevilMotorsports/ESP32-temp/managed_components/espressif__led_strip
+# Install script for directory: C:/Users/aditi/Desktop/#2 SunDevilMotorsports/ESP32_Temp/managed_components/espressif__led_strip
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

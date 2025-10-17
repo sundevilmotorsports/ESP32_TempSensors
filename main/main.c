@@ -14,8 +14,8 @@ void app_main(void)
 
     // I2C configuration - change pins to match your wiring
     const i2c_port_t i2c_num = I2C_NUM_0;
-    const int i2c_sda_pin = 21; // change as needed
-    const int i2c_scl_pin = 22; // change as needed
+    const int i2c_sda_pin = 1; // change as needed
+    const int i2c_scl_pin = 2; // change as needed
     const int i2c_freq_hz = 100000;
 
     i2c_config_t conf = {
@@ -34,7 +34,7 @@ void app_main(void)
     float to = 0.0f, ta = 0.0f;
     while (1) {
         if (mlx90614_read_object_temp(i2c_num, &to) == ESP_OK) {
-            ESP_LOGI("MLX", "Object Temp: %.2f C", to);
+            ESP_LOGI("MLX", "Object Temp: %.2f C", to);   ;
         } else {
             ESP_LOGW("MLX", "Failed to read object temp");
         }

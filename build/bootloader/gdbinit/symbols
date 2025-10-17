@@ -17,4 +17,4 @@ set confirm off
 set confirm on
 
 # Load application symbols
-file C:/Users/aditi/Desktop/#2 SunDevilMotorsports/ESP32-temp/build/bootloader/bootloader.elf
+file C:/Users/aditi/Desktop/#2 SunDevilMotorsports/ESP32_Temp/build/bootloader/bootloader.elf
