@@ -63,6 +63,51 @@ esp_err_t mlx90614_write_raw_register(i2c_port_t i2c_num, uint8_t reg, uint16_t 
     return mlx_write_word(i2c_num, reg, value);
 }
 
+// Runtime address variants
+esp_err_t mlx90614_read_raw_register_at(i2c_port_t i2c_num, uint8_t slave_addr, uint8_t reg, uint16_t *value)
+{
+    // Inline similar logic to mlx_read_word but using slave_addr
+    i2c_cmd_handle_t cmd = i2c_cmd_link_create();
+    i2c_master_start(cmd);
+    i2c_master_write_byte(cmd, (slave_addr << 1) | I2C_MASTER_WRITE, true);
+    i2c_master_write_byte(cmd, reg, true);
+    i2c_master_start(cmd);
+    i2c_master_write_byte(cmd, (slave_addr << 1) | I2C_MASTER_READ, true);
+    uint8_t low = 0, high = 0, pec = 0;
+    i2c_master_read_byte(cmd, &low, I2C_MASTER_ACK);
+    i2c_master_read_byte(cmd, &high, I2C_MASTER_ACK);
+    i2c_master_read_byte(cmd, &pec, I2C_MASTER_NACK);
+    i2c_master_stop(cmd);
+    esp_err_t ret = i2c_master_cmd_begin(i2c_num, cmd, pdMS_TO_TICKS(100));
+    i2c_cmd_link_delete(cmd);
+    if (ret == ESP_OK) {
+        *value = ((uint16_t)high << 8) | low;
+    } else {
+        ESP_LOGW(TAG, "i2c read word failed: %d", ret);
+    }
+    return ret;
+}
+
+esp_err_t mlx90614_read_object_temp_at(i2c_port_t i2c_num, uint8_t slave_addr, float *temp_c)
+{
+    uint16_t raw;
+    esp_err_t r = mlx90614_read_raw_register_at(i2c_num, slave_addr, 0x07, &raw);
+    if (r != ESP_OK) return r;
+    float temp_k = raw * 0.02f;
+    *temp_c = temp_k - 273.15f;
+    return ESP_OK;
+}
+
+esp_err_t mlx90614_read_ambient_temp_at(i2c_port_t i2c_num, uint8_t slave_addr, float *temp_c)
+{
+    uint16_t raw;
+    esp_err_t r = mlx90614_read_raw_register_at(i2c_num, slave_addr, 0x06, &raw);
+    if (r != ESP_OK) return r;
+    float temp_k = raw * 0.02f;
+    *temp_c = temp_k - 273.15f;
+    return ESP_OK;
+}
+
 esp_err_t mlx90614_read_object_temp(i2c_port_t i2c_num, float *temp_c)
 {
     uint16_t raw;
